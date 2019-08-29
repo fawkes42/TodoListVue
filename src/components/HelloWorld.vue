@@ -8,7 +8,6 @@
     <section class="bacana">
       <div class="button">
         <input type="button" value="+" @click="novo">
-        <input type="button" :value="mostrar ? 'Mostrar somente feitos' : 'Mostrar todos'" @click="show">
         <ul>
           <li v-for="(item, index) in listaFiltrada" :key="index">
             <input type="text" v-model="item.texto" @input="atualiza(item, 'texto')" placeholder="Titulo da tarefa">
