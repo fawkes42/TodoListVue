@@ -12,7 +12,7 @@ export default {
 
 <style>
 *{
-  background-color: rgb(32, 31, 31);
+  background-color: rgb(138, 65, 65);
 }
 body{
   margin: 0;
