@@ -3,19 +3,34 @@
     <nav class="menu">
       <img src="../assets/logo.png">
     </nav>
-    <h1>{{ msg }}</h1>
+    <h1>{{ title }}</h1>
     <h2>Bacaníssimo</h2>
+    <section class="bacana">
       <div class="button">
         <input type="button" value="+" @click="novo">
         <input type="button" :value="mostrar ? 'Mostrar somente pendentes' : 'Mostrar todos'" @click="show">
         <ul>
           <li v-for="(item, index) in listaFiltrada" :key="index">
-            <input type="text" v-model="item.texto" @input="atualiza(item, 'texto')">
+            <input type="text" v-model="item.texto" @input="atualiza(item, 'texto')" placeholder="Titulo da tarefa">
             <input type="checkbox" v-model="item.pronto" @change="atualiza(item, 'pronto')">
             <input type="button" value="-" @click="apaga(index)">
           </li>
         </ul>
       </div>
+      <div class="chat">
+        <div class="talk">
+          <ul>
+            <li v-for="message in messages" :key="message">
+              {{message.msg}}
+            </li>
+          </ul>
+        </div>
+        <div class="panel">
+          <input type="text" v-model="message" placeholder="Digite sua mensagem">
+          <input type="button" value="Enviar" @click="send(message)">
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -27,9 +42,11 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
-      msg: 'Teste Vue.js',
+      title: 'Teste Vue.js',
       mostrar: true,
-      lista: []
+      lista: [],
+      messages: [],
+      message: ''
     }
   },
   methods: {
@@ -56,6 +73,21 @@ export default {
           pronto: valores[prop].pronto
         })
       }
+    },
+    carregaChat (snapshot) {
+      this.messages = []
+      let valores = snapshot.val()
+      for (let prop in valores) {
+        this.messages.push({
+          key: prop,
+          msg: valores[prop].msg
+        })
+      }
+    },
+    send (msg) {
+      let key = firebase.database().ref().child('chat').push().key
+      firebase.database().ref('chat/' + key).set({msg})
+      this.message = ''
     }
   },
   computed: {
@@ -84,6 +116,12 @@ export default {
     firebase.database().ref('tasks').on('value', snapshot => {
       this.carrega(snapshot)
     })
+    firebase.database().ref('chat').once('value').then(snapshot => {
+      this.carregaChat(snapshot)
+    })
+    firebase.database().ref('chat').on('value', snapshot => {
+      this.carregaChat(snapshot)
+    })
   }
 }
 </script>
@@ -107,10 +145,29 @@ img{
   height: 50px;
   background-color: transparent;
 }
+.bacana{
+  display: flex;
+  height: auto;
+}
+.button{
+  width: 50%;
+}
+.chat{
+  position: relative;
+}
+.talk{
+  margin-bottom: 40px
+}
+.panel{
+  position: absolute;
+  bottom: 0 !important;
+  left: 0;
+  display: flex;
+}
 li{
   width: auto;
   margin: 10px;
-  list-style-type: none
+  list-style-type: none;
 }
 input[type = button], input[type = text], input[type = checkbox]{
   margin: 5px;
