@@ -154,27 +154,41 @@ img{
 }
 .chat{
   position: relative;
+  width: 50%;
+  display: flex;
 }
 .talk{
-  margin-bottom: 40px
+  margin-bottom: 40px;
+  width: 25%
 }
 .panel{
   position: absolute;
   bottom: 0 !important;
   left: 0;
-  display: flex;
 }
 li{
   width: auto;
   margin: 10px;
   list-style-type: none;
 }
-input[type = button], input[type = text], input[type = checkbox]{
+input[type = button], input[type = text], input[type = checkbox], .talk > ul > li{
   margin: 5px;
   padding: 5px 10px;
   border: 2px black;
   border-radius: 5px;
   box-shadow: 5px 5px 5px gray;
   background-color: white
+}
+.talk > ul{
+  margin: 0;
+  padding: 0;
+}
+.talk > ul > li{
+  color: black;
+  text-shadow: none;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-top: 15px;
+  width: auto !important;
+  text-align: left
 }
 </style>
